@@ -1,7 +1,10 @@
 package com.example.demo.controllers;
 
+import com.example.demo.objects.Video.DTOs.ToModificationDto;
+import com.example.demo.objects.Video.DTOs.ToModificationReturnDto;
 import com.example.demo.objects.Video.DTOs.VideoDto;
 import com.example.demo.services.VideoService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -42,5 +46,17 @@ public class VideoController {
 
     }
 
+
+
+    @CrossOrigin("*")
+    @PostMapping("/video/describe/modify")
+    public ResponseEntity<ToModificationReturnDto> transcribeVideoAndReturnTranscripstionsModificade( ToModificationDto toModificationDto) throws Exception {
+        byte[] videoEmbyte = toModificationDto.getFile().getBytes();
+        VideoDto videoDto = service.transcribeVideo(toModificationDto.getFile());
+        ToModificationReturnDto retorno = new ToModificationReturnDto(service.transcribeVideoAndReturnTranscripstionsModificade(toModificationDto,
+                videoDto),
+                videoEmbyte);
+        return ResponseEntity.ok(retorno);
+    }
 
 }

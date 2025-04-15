@@ -1,6 +1,7 @@
 package com.example.demo.services;
 import javax.sound.sampled.AudioSystem;
 
+import com.example.demo.objects.Video.DTOs.ToModificationDto;
 import com.example.demo.objects.Video.DTOs.VideoDto;
 import com.example.demo.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.vosk.Recognizer;
 import javax.sound.sampled.AudioSystem;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -156,5 +159,27 @@ public class VideoService {
                 // Ajuste fino
                 // Normalização de texto
         );
+    }
+
+    public List<String> transcribeVideoAndReturnTranscripstionsModificade(ToModificationDto toModificationDto,
+                                                                            VideoDto videoDto){
+        List<String> retorno = new ArrayList<String>();
+        String palavraParaModificacao = toModificationDto.getPalavraEscolhida();
+        int posicao = videoDto.getTranscricao().indexOf(palavraParaModificacao);
+
+        if(posicao != -1){
+
+            for(int i = 0; i < toModificationDto.getPalavrasParaModificacao().size(); i++){
+                String modificacao = videoDto.getTranscricao().replace(palavraParaModificacao,
+                                     toModificationDto.getPalavrasParaModificacao().get(i));
+
+
+                 retorno.add(modificacao);
+
+            }
+        }
+
+
+        return retorno;
     }
 }
